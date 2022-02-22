@@ -1,0 +1,102 @@
+server:
+  port: 8899
+  servlet:
+    context-path: /demo
+
+spring:
+  application:
+    name: demo
+  servlet:
+    multipart:
+      enabled: true # 开启文件上传
+      max-file-size: 100MB # 文件上传限定大小
+      max-request-size: 100MB # request请求限定大小
+  # 数据源配置
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/qidian_qss?useUnicode=true&zeroDateTimeBehavior
+      =convertToNull&autoReconnect=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+      username: root
+      password: 123456
+      #      key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJHVZ9TTod4wTtF8Yk2FHBVvAD8wDmea6ZWIHlNxm72KwY1JnErwVfKMbyGLjx3ibeZyJIgjphwAe86Phk2pCa8CAwEAAQ==
+      #      connection-properties: "druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000;config.decrypt=true;config.decrypt.key=${spring.datasource.druid.key}"
+      initial-size: 1
+      max-active: 20
+      filters: stat,wall,slf4j,config
+      max-wait: 60000
+      min-idle: 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      async-init: true
+      web-stat-filter:
+        enabled: true
+        exclusions: "*.js, *.gif, *.jpg, *.png, *.css, *.ico, /v2/*, /swagger*, /druid/*, /doc.html"
+      stat-view-servlet:
+        enabled: true
+        login-username: druid
+        login-password: druid
+        #allow: localhost # 只允许哪些地方可以访问，一般填ip
+
+  # redis
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 47292
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000
+  #kafka配置信息
+  kafka:
+    bootstrap-servers: 9.139.144.213:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: latest
+
+elasticsearch:
+  host: 127.0.0.1:9200
+  connect_timeout_millis: 3000
+  username: elastic
+  password: elastic
+
+
+# 日志配置
+logging:
+  config: classpath:config/logback-spring.xml
+  level:
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+
+# 是否显示mybatis-plus控制台启动logo
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+  mapper-locations: classpath*:/mapper/**/*.xml
+
+# 定时任务
+xxl-job:
+  admin-addresses: http://172.16.8.50:58336/xxl-job-admin
+  access-token:
+  executor:
+    appname: xxl-job-executor
+    address:
+    ip:
+    port: 9999
+    logpath: /Users/yinchendong/Downloads/jobhandler
+    logretentiondays: 30
+
+
+
+
